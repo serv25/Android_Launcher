@@ -32,12 +32,10 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btnCall:
-                    Intent intentCall = new Intent(Intent.ACTION_DIAL);
-                    startActivity(intentCall);
+                    startActivity(new Intent(Intent.ACTION_DIAL));
                     break;
                 case R.id.btnApps:
-                    Intent intentApps = new Intent(MainActivity.this, AppsActivity.class);
-                    startActivity(intentApps);
+                    startActivity(new Intent(MainActivity.this, AppsActivity.class));
                     break;
                 case R.id.btnSMS:
                     Intent intentSMS = new Intent(Intent.ACTION_VIEW);
