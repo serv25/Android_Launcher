@@ -3,6 +3,8 @@ package com.example.serega.mylauncher;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.provider.Settings;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +23,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
         public TextView appView;
         public ImageView appIcon;
+        private PopupWindow popupWindow;
 
         public ViewHolder(View v) {
             super(v);
@@ -45,11 +48,13 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 @Override
                 public boolean onLongClick(View view) {
                     View inflatedView = view.inflate(view.getContext(), R.layout.popup_window, null);
-                    PopupWindow popupWindow = new PopupWindow(
+                    popupWindow = new PopupWindow(
                             inflatedView,
                             ViewGroup.LayoutParams.WRAP_CONTENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT
                     );
+                    popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    popupWindow.setOutsideTouchable(true);
                     popupWindow.showAsDropDown(view, 0, 0);
                     TextView uninstall = (TextView) inflatedView.findViewById(R.id.uninstall);
                     TextView aboutApp = (TextView) inflatedView.findViewById(R.id.about_app);
@@ -88,6 +93,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                         }
                         break;
                 }
+                popupWindow.dismiss();
             }
         };
     }
