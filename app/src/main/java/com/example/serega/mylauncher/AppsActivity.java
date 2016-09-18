@@ -9,8 +9,12 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +28,14 @@ public class AppsActivity extends Activity {
     private RecyclerView.LayoutManager layoutManager;
     private Button btnList;
     private Button btnGrid;
+    private EditText search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.apps_activity);
+
+        search = (EditText) findViewById(R.id.search);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -37,13 +44,43 @@ public class AppsActivity extends Activity {
         recyclerView.setLayoutManager(layoutManager);
 
         apps = allApps();
-        adapter = new MyRecyclerAdapter(apps);
+        adapter = new MyRecyclerAdapter(apps, this);
         recyclerView.setAdapter(adapter);
 
         btnList = (Button) findViewById(R.id.btn_list);
         btnGrid = (Button) findViewById(R.id.btn_grid);
         btnList.setOnClickListener(onClickListener);
         btnGrid.setOnClickListener(onClickListener);
+
+        addTextListener();
+    }
+
+    public void addTextListener() {
+
+        search.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence query, int start, int before, int count) {
+                query = query.toString().toLowerCase();
+                final ArrayList<AppInfo> filteredList = new ArrayList<>();
+
+                for (int i = 0; i < apps.size(); i++) {
+                    final String text = apps.get(i).getLabel().toString().toLowerCase();
+                        if (text.contains(query)) {
+                        filteredList.add(apps.get(i));
+                    }
+                }
+
+                adapter = new MyRecyclerAdapter(filteredList, AppsActivity.this);
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {

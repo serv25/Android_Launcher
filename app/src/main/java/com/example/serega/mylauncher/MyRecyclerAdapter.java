@@ -1,6 +1,7 @@
 package com.example.serega.mylauncher;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -18,6 +19,42 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.ViewHolder> {
+
+    private static ArrayList<AppInfo> apps;
+    private Context context;
+
+    public static ArrayList<AppInfo> getApps() {
+        return apps;
+    }
+
+    public MyRecyclerAdapter(ArrayList<AppInfo> apps, Context context) {
+        this.apps = apps;
+        this.context = context;
+    }
+
+    @Override
+    public MyRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v;
+        if(context instanceof MainActivity){
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.app_item, parent, false);
+        }else{
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.app_item_with_checkbox, parent, false);
+        }
+
+        ViewHolder vh = new ViewHolder(v);
+        return vh;
+    }
+
+    @Override
+    public void onBindViewHolder(MyRecyclerAdapter.ViewHolder holder, int position) {
+            holder.appView.setText(apps.get(position).getLabel());
+            holder.appIcon.setImageDrawable(apps.get(position).getIcon());
+    }
+
+    @Override
+    public int getItemCount() {
+        return apps.size();
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -96,33 +133,5 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 popupWindow.dismiss();
             }
         };
-    }
-
-    private static ArrayList<AppInfo> apps;
-
-    public static ArrayList<AppInfo> getApps() {
-        return apps;
-    }
-
-    public MyRecyclerAdapter(ArrayList<AppInfo> apps) {
-        this.apps = apps;
-    }
-
-    @Override
-    public MyRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.app_item, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
-    }
-
-    @Override
-    public void onBindViewHolder(MyRecyclerAdapter.ViewHolder holder, int position) {
-        holder.appView.setText(apps.get(position).getLabel());
-        holder.appIcon.setImageDrawable(apps.get(position).getIcon());
-    }
-
-    @Override
-    public int getItemCount() {
-        return apps.size();
     }
 }

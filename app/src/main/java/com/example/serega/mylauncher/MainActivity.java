@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         apps = allApps();
-        adapter = new MyRecyclerAdapter(apps);
+        adapter = new MyRecyclerAdapter(apps,this);
         recyclerView.setAdapter(adapter);
 
         btnCall = (ImageButton) findViewById(R.id.btnCall);
