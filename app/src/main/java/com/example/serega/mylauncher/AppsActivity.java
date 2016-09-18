@@ -33,7 +33,7 @@ public class AppsActivity extends Activity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
 
-        layoutManager = new LinearLayoutManager(AppsActivity.this);
+        layoutManager = new GridLayoutManager(AppsActivity.this, 3);
         recyclerView.setLayoutManager(layoutManager);
 
         apps = allApps();

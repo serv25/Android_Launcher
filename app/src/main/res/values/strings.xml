@@ -2,4 +2,6 @@
     <string name="app_name">MyLauncher</string>
     <string name="action_settings">Setting</string>
     <string name="btn_apps">Apps</string>
+    <string name="uninstall">Uninstall</string>
+    <string name="about_app">About app</string>
 </resources>

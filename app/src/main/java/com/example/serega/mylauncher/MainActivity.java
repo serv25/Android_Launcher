@@ -2,25 +2,51 @@ package com.example.serega.mylauncher;
 
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+
+    private PackageManager manager;
+    private ArrayList<AppInfo> apps;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private ImageButton btnCall;
+    private Button btnApps;
+    private ImageButton btnSMS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ImageButton btnCall = (ImageButton) findViewById(R.id.btnCall);
-        Button btnApps = (Button) findViewById(R.id.btnApps);
-        ImageButton btnSMS = (ImageButton) findViewById(R.id.btnSMS);
+        recyclerView = (RecyclerView) findViewById(R.id.main_recycler_view);
+        recyclerView.setHasFixedSize(true);
+
+        layoutManager = new GridLayoutManager(MainActivity.this, 3);
+        recyclerView.setLayoutManager(layoutManager);
+
+        apps = allApps();
+        adapter = new MyRecyclerAdapter(apps);
+        recyclerView.setAdapter(adapter);
+
+        btnCall = (ImageButton) findViewById(R.id.btnCall);
+        btnApps = (Button) findViewById(R.id.btnApps);
+        btnSMS = (ImageButton) findViewById(R.id.btnSMS);
 
         btnCall.setOnClickListener(onClickListener);
         btnApps.setOnClickListener(onClickListener);
@@ -63,5 +89,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private ArrayList<AppInfo> allApps() {
+        manager = getPackageManager();
+        ArrayList<AppInfo> allApps = new ArrayList<>();
+
+        Intent intent = new Intent(Intent.ACTION_MAIN, null);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        List<ResolveInfo> availableApps = manager.queryIntentActivities(intent, 0);
+        for (ResolveInfo resolveInfo : availableApps) {
+            AppInfo app = new AppInfo(
+                    resolveInfo.loadLabel(manager),
+                    resolveInfo.activityInfo.packageName,
+                    resolveInfo.activityInfo.loadIcon(manager));
+            allApps.add(app);
+        }
+        return allApps;
     }
 }
