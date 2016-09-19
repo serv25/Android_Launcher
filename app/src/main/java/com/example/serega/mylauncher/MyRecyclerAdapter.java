@@ -35,21 +35,18 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
     @Override
     public MyRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v;
-        if(context instanceof MainActivity){
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.app_item, parent, false);
-        }else{
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.app_item_with_checkbox, parent, false);
-        }
-
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.app_item, parent, false);
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
 
     @Override
     public void onBindViewHolder(MyRecyclerAdapter.ViewHolder holder, int position) {
-            holder.appView.setText(apps.get(position).getLabel());
-            holder.appIcon.setImageDrawable(apps.get(position).getIcon());
+        holder.appView.setText(apps.get(position).getLabel());
+        holder.appIcon.setImageDrawable(apps.get(position).getIcon());
+        boolean bool = apps.get(position).isOnDesktop();
+        holder.appCheckBox.setChecked(bool);
+
     }
 
     @Override
@@ -61,13 +58,23 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
         public TextView appView;
         public ImageView appIcon;
-        public CheckBox checkBox;
+        public CheckBox appCheckBox;
         private PopupWindow popupWindow;
 
         public ViewHolder(View v) {
             super(v);
             appView = (TextView) v.findViewById(R.id.app_view);
             appIcon = (ImageView) v.findViewById(R.id.app_icon);
+            appCheckBox = (CheckBox) v.findViewById(R.id.on_desktop);
+            appCheckBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    boolean onDesktop = false;
+                    if(appCheckBox.isChecked()) onDesktop = true;
+                    getApps().get(position).setOnDesktop(onDesktop);
+                }
+            });
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
