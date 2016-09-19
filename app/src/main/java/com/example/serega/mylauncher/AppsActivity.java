@@ -11,7 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,13 +21,17 @@ import java.util.List;
 public class AppsActivity extends Activity {
 
     private PackageManager manager;
-    private ArrayList<AppInfo> apps;
+    private static ArrayList<AppInfo> apps = new ArrayList<>();
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private Button btnList;
     private Button btnGrid;
     private EditText search;
+
+    public static ArrayList<AppInfo> getApps() {
+        return apps;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,15 +59,11 @@ public class AppsActivity extends Activity {
     }
 
     public void addTextListener() {
-
         search.addTextChangedListener(new TextWatcher() {
-
             public void afterTextChanged(Editable s) {
             }
-
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-
             public void onTextChanged(CharSequence query, int start, int before, int count) {
                 query = query.toString().toLowerCase();
                 final ArrayList<AppInfo> filteredList = new ArrayList<>();
@@ -99,6 +98,16 @@ public class AppsActivity extends Activity {
         }
     };
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        apps.clear();
+        apps = allApps();
+        adapter = new MyRecyclerAdapter(apps,AppsActivity.this);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
     private ArrayList<AppInfo> allApps() {
         manager = getPackageManager();
         ArrayList<AppInfo> allApps = new ArrayList<>();
@@ -116,4 +125,5 @@ public class AppsActivity extends Activity {
         }
         return allApps;
     }
+
 }

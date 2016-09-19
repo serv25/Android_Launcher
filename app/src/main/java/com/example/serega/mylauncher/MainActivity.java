@@ -2,8 +2,6 @@ package com.example.serega.mylauncher;
 
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -16,11 +14,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private PackageManager manager;
     private ArrayList<AppInfo> apps;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -80,32 +76,27 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent intent = new Intent(Settings.ACTION_SETTINGS);
                 startActivity(intent);
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        apps.clear();
+        apps = allApps();
+        adapter = new MyRecyclerAdapter(apps,MainActivity.this);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
     private ArrayList<AppInfo> allApps() {
-        manager = getPackageManager();
-        ArrayList<AppInfo> allApps = new ArrayList<>();
-
-        Intent intent = new Intent(Intent.ACTION_MAIN, null);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-        List<ResolveInfo> availableApps = manager.queryIntentActivities(intent, 0);
-        for (ResolveInfo resolveInfo : availableApps) {
-            AppInfo app = new AppInfo(
-                    resolveInfo.loadLabel(manager),
-                    resolveInfo.activityInfo.packageName,
-                    resolveInfo.activityInfo.loadIcon(manager));
-            allApps.add(app);
-        }
-        return allApps;
+        ArrayList<AppInfo> tempList = AppsActivity.getApps();
+        return tempList;
     }
 }
