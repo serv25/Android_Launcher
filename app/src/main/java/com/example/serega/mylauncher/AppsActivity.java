@@ -72,9 +72,7 @@ public class AppsActivity extends Activity {
 
                 for (int i = 0; i < apps.size(); i++) {
                     final String text = apps.get(i).getLabel().toString().toLowerCase();
-                    if (text.contains(query)) {
-                        filteredList.add(apps.get(i));
-                    }
+                    if (text.contains(query)) filteredList.add(apps.get(i));
                 }
 
                 adapter = new MyRecyclerAdapter(filteredList, AppsActivity.this);
