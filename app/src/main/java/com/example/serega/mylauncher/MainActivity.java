@@ -24,6 +24,20 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton btnCall;
     private Button btnApps;
     private ImageButton btnSMS;
+    private static int currentAmountOfApps = 0;
+    private static final int MAX_AMOUNT_OF_APPS = 12;
+
+    public static int getCurrentAmountOfApps() {
+        return currentAmountOfApps;
+    }
+
+    public static void setCurrentAmountOfApps(int currentAmountOfApps) {
+        MainActivity.currentAmountOfApps = currentAmountOfApps;
+    }
+
+    public static int getMaxAmountOfApps() {
+        return MAX_AMOUNT_OF_APPS;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<AppInfo> tempList = AppsActivity.getApps();
         ArrayList<AppInfo> desktopList = new ArrayList<>();
         for (AppInfo app: tempList) {
+            if(tempList.size() == MAX_AMOUNT_OF_APPS)break;
             if(app.isOnDesktop())desktopList.add(app);
         }
         return desktopList;

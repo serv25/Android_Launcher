@@ -62,15 +62,17 @@ public class AppsActivity extends Activity {
         search.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
             }
+
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             public void onTextChanged(CharSequence query, int start, int before, int count) {
                 query = query.toString().toLowerCase();
                 final ArrayList<AppInfo> filteredList = new ArrayList<>();
 
                 for (int i = 0; i < apps.size(); i++) {
                     final String text = apps.get(i).getLabel().toString().toLowerCase();
-                        if (text.contains(query)) {
+                    if (text.contains(query)) {
                         filteredList.add(apps.get(i));
                     }
                 }
@@ -102,7 +104,7 @@ public class AppsActivity extends Activity {
     protected void onResume() {
         super.onResume();
         apps = allApps();
-        adapter = new MyRecyclerAdapter(apps,AppsActivity.this);
+        adapter = new MyRecyclerAdapter(apps, AppsActivity.this);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -123,16 +125,15 @@ public class AppsActivity extends Activity {
             allApps.add(app);
         }
 
-        for(int i = 0; i < apps.size(); i++){
-            String name = apps.get(i).getName().toString();
-            for(int k = 0; k < allApps.size(); k++){
-                if(name.equals(allApps.get(k).getName().toString())){
+        for (int i = 0; i < apps.size(); i++) {
+            String name = apps.get(i).getLabel().toString();
+            for (int k = 0; k < allApps.size(); k++) {
+                if (name.equals(allApps.get(k).getLabel().toString())) {
                     allApps.get(k).setOnDesktop(apps.get(i).isOnDesktop());
                     break;
                 }
             }
         }
-
 
         return allApps;
     }

@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -36,17 +37,15 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
     @Override
     public MyRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.app_item, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(MyRecyclerAdapter.ViewHolder holder, int position) {
         holder.appView.setText(apps.get(position).getLabel());
         holder.appIcon.setImageDrawable(apps.get(position).getIcon());
-        boolean bool = apps.get(position).isOnDesktop();
-        holder.appCheckBox.setChecked(bool);
-        if(context instanceof MainActivity) holder.appCheckBox.setVisibility(View.GONE);
+        if (context instanceof MainActivity) holder.appCheckBox.setVisibility(View.GONE);
+        else holder.appCheckBox.setChecked(apps.get(position).isOnDesktop());
     }
 
     @Override
@@ -70,9 +69,21 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    boolean onDesktop = false;
-                    if(appCheckBox.isChecked()) onDesktop = true;
-                    getApps().get(position).setOnDesktop(onDesktop);
+                    int count = MainActivity.getCurrentAmountOfApps();
+                    if (appCheckBox.isChecked()) {
+                        if (count < MainActivity.getMaxAmountOfApps()) {
+                            getApps().get(position).setOnDesktop(true);
+                            count++;
+                            MainActivity.setCurrentAmountOfApps(count);
+                        } else {
+                            appCheckBox.setChecked(false);
+                            Toast.makeText(view.getContext(), "There is no place on desktop!", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        getApps().get(position).setOnDesktop(false);
+                        count--;
+                        MainActivity.setCurrentAmountOfApps(count);
+                    }
                 }
             });
             v.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +117,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                     TextView aboutApp = (TextView) inflatedView.findViewById(R.id.about_app);
                     aboutApp.setOnClickListener(onClickListener);
                     uninstall.setOnClickListener(onClickListener);
-
                     return true;
                 }
             });
