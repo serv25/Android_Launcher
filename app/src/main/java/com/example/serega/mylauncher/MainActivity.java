@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ImageButton btnCall;
-    private Button btnApps;
+    private ImageButton btnApps;
     private ImageButton btnSMS;
     private static int currentAmountOfApps = 0;
     private static final int MAX_AMOUNT_OF_APPS = 12;
@@ -55,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         btnCall = (ImageButton) findViewById(R.id.btnCall);
-        btnApps = (Button) findViewById(R.id.btnApps);
+        btnApps = (ImageButton) findViewById(R.id.btnApps);
         btnSMS = (ImageButton) findViewById(R.id.btnSMS);
 
         btnCall.setOnClickListener(onClickListener);
