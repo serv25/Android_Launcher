@@ -101,7 +101,6 @@ public class AppsActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        apps.clear();
         apps = allApps();
         adapter = new MyRecyclerAdapter(apps,AppsActivity.this);
         recyclerView.setAdapter(adapter);
@@ -123,6 +122,18 @@ public class AppsActivity extends Activity {
                     resolveInfo.activityInfo.loadIcon(manager));
             allApps.add(app);
         }
+
+        for(int i = 0; i < apps.size(); i++){
+            String name = apps.get(i).getName().toString();
+            for(int k = 0; k < allApps.size(); k++){
+                if(name.equals(allApps.get(k).getName().toString())){
+                    allApps.get(k).setOnDesktop(apps.get(i).isOnDesktop());
+                    break;
+                }
+            }
+        }
+
+
         return allApps;
     }
 

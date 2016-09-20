@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        apps.clear();
         apps = allApps();
         adapter = new MyRecyclerAdapter(apps,MainActivity.this);
         recyclerView.setAdapter(adapter);
@@ -97,6 +96,10 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<AppInfo> allApps() {
         ArrayList<AppInfo> tempList = AppsActivity.getApps();
-        return tempList;
+        ArrayList<AppInfo> desktopList = new ArrayList<>();
+        for (AppInfo app: tempList) {
+            if(app.isOnDesktop())desktopList.add(app);
+        }
+        return desktopList;
     }
 }

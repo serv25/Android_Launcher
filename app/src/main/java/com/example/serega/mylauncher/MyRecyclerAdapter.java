@@ -46,7 +46,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         holder.appIcon.setImageDrawable(apps.get(position).getIcon());
         boolean bool = apps.get(position).isOnDesktop();
         holder.appCheckBox.setChecked(bool);
-
+        if(context instanceof MainActivity) holder.appCheckBox.setVisibility(View.GONE);
     }
 
     @Override
