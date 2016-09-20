@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         layoutManager = new GridLayoutManager(MainActivity.this, 3);
         recyclerView.setLayoutManager(layoutManager);
 
-        apps = allApps();
+        apps = getDesktopApps();
         adapter = new MyRecyclerAdapter(apps,this);
         recyclerView.setAdapter(adapter);
 
@@ -102,13 +102,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        apps = allApps();
+        apps = getDesktopApps();
         adapter = new MyRecyclerAdapter(apps,MainActivity.this);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
 
-    private ArrayList<AppInfo> allApps() {
+    private ArrayList<AppInfo> getDesktopApps() {
         ArrayList<AppInfo> tempList = AppsActivity.getApps();
         ArrayList<AppInfo> desktopList = new ArrayList<>();
         for (AppInfo app: tempList) {

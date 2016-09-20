@@ -46,7 +46,7 @@ public class AppsActivity extends Activity {
         layoutManager = new GridLayoutManager(AppsActivity.this, 3);
         recyclerView.setLayoutManager(layoutManager);
 
-        apps = allApps();
+        apps = getAllApps();
         adapter = new MyRecyclerAdapter(apps, this);
         recyclerView.setAdapter(adapter);
 
@@ -101,13 +101,13 @@ public class AppsActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        apps = allApps();
+        apps = getAllApps();
         adapter = new MyRecyclerAdapter(apps, AppsActivity.this);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
 
-    private ArrayList<AppInfo> allApps() {
+    private ArrayList<AppInfo> getAllApps() {
         manager = getPackageManager();
         ArrayList<AppInfo> allApps = new ArrayList<>();
 

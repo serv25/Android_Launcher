@@ -42,7 +42,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
     @Override
     public void onBindViewHolder(MyRecyclerAdapter.ViewHolder holder, int position) {
-        holder.appView.setText(apps.get(position).getLabel());
+        holder.appName.setText(apps.get(position).getLabel());
         holder.appIcon.setImageDrawable(apps.get(position).getIcon());
         if (context instanceof MainActivity) holder.appCheckBox.setVisibility(View.GONE);
         else holder.appCheckBox.setChecked(apps.get(position).isOnDesktop());
@@ -55,14 +55,14 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView appView;
+        public TextView appName;
         public ImageView appIcon;
         public CheckBox appCheckBox;
         private PopupWindow popupWindow;
 
         public ViewHolder(View v) {
             super(v);
-            appView = (TextView) v.findViewById(R.id.app_view);
+            appName = (TextView) v.findViewById(R.id.app_view);
             appIcon = (ImageView) v.findViewById(R.id.app_icon);
             appCheckBox = (CheckBox) v.findViewById(R.id.on_desktop);
             appCheckBox.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +77,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                             MainActivity.setCurrentAmountOfApps(count);
                         } else {
                             appCheckBox.setChecked(false);
-                            Toast.makeText(view.getContext(), "There is no place on desktop!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(view.getContext(), "There is no space on desktop!", Toast.LENGTH_LONG).show();
                         }
                     } else {
                         getApps().get(position).setOnDesktop(false);
