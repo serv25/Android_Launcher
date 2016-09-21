@@ -111,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<AppInfo> tempList = AppsActivity.getApps();
         ArrayList<AppInfo> desktopList = new ArrayList<>();
         for (AppInfo app: tempList) {
-            if(tempList.size() == MAX_AMOUNT_OF_APPS)break;
             if(app.isOnDesktop())desktopList.add(app);
+            if(tempList.size() == MAX_AMOUNT_OF_APPS)break;
         }
         return desktopList;
     }
