@@ -132,7 +132,6 @@ public class AppsActivity extends Activity {
                 }
             }
         }
-
         return allApps;
     }
 

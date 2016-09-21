@@ -29,7 +29,7 @@
             android:id="@+id/search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#ffffff"
+            android:background="@drawable/search_style"
             android:hint="@string/text_search"
             android:padding="5dp"/>
 
