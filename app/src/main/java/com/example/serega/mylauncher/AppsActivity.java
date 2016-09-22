@@ -20,17 +20,18 @@ import java.util.List;
 
 public class AppsActivity extends Activity {
 
-    private PackageManager manager;
-    private static ArrayList<AppInfo> apps = new ArrayList<>();
+    private static ArrayList<AppInfo> apps;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private Button btnList;
-    private Button btnGrid;
     private EditText search;
 
     public static ArrayList<AppInfo> getApps() {
         return apps;
+    }
+
+    public static void setApps(ArrayList<AppInfo> apps) {
+        AppsActivity.apps = apps;
     }
 
     @Override
@@ -38,26 +39,20 @@ public class AppsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.apps_activity);
 
-        search = (EditText) findViewById(R.id.search);
-
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
+        search = (EditText) findViewById(R.id.search);
+        Button btnList = (Button) findViewById(R.id.btn_list);
+        Button btnGrid = (Button) findViewById(R.id.btn_grid);
 
         layoutManager = new GridLayoutManager(AppsActivity.this, 3);
         recyclerView.setLayoutManager(layoutManager);
-
+        recyclerView.setHasFixedSize(true);
         adapter = new MyRecyclerAdapter(apps, this);
         recyclerView.setAdapter(adapter);
 
-        btnList = (Button) findViewById(R.id.btn_list);
-        btnGrid = (Button) findViewById(R.id.btn_grid);
         btnList.setOnClickListener(onClickListener);
         btnGrid.setOnClickListener(onClickListener);
 
-        addTextListener();
-    }
-
-    public void addTextListener() {
         search.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
             }
@@ -103,11 +98,10 @@ public class AppsActivity extends Activity {
         apps = getAllApps();
         adapter = new MyRecyclerAdapter(apps, AppsActivity.this);
         recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
     }
 
     private ArrayList<AppInfo> getAllApps() {
-        manager = getPackageManager();
+        PackageManager manager = getPackageManager();
         ArrayList<AppInfo> allApps = new ArrayList<>();
 
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
@@ -133,5 +127,4 @@ public class AppsActivity extends Activity {
         }
         return allApps;
     }
-
 }

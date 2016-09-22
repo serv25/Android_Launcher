@@ -2,6 +2,8 @@ package com.example.serega.mylauncher;
 
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -13,16 +15,13 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private ArrayList<AppInfo> apps;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
-    private ImageButton btnCall;
-    private ImageButton btnApps;
-    private ImageButton btnSMS;
     private static int currentAmountOfApps = 0;
     private static final int MAX_AMOUNT_OF_APPS = 12;
 
@@ -44,18 +43,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         recyclerView = (RecyclerView) findViewById(R.id.main_recycler_view);
-        recyclerView.setHasFixedSize(true);
+        ImageButton btnCall = (ImageButton) findViewById(R.id.btnCall);
+        ImageButton btnApps = (ImageButton) findViewById(R.id.btnApps);
+        ImageButton btnSMS = (ImageButton) findViewById(R.id.btnSMS);
 
-        layoutManager = new GridLayoutManager(MainActivity.this, 3);
-        recyclerView.setLayoutManager(layoutManager);
-
+        initializeAppsList();
         apps = getDesktopApps();
+
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 3);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
         adapter = new MyRecyclerAdapter(apps, this);
         recyclerView.setAdapter(adapter);
-
-        btnCall = (ImageButton) findViewById(R.id.btnCall);
-        btnApps = (ImageButton) findViewById(R.id.btnApps);
-        btnSMS = (ImageButton) findViewById(R.id.btnSMS);
 
         btnCall.setOnClickListener(onClickListener);
         btnApps.setOnClickListener(onClickListener);
@@ -104,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
         apps = getDesktopApps();
         adapter = new MyRecyclerAdapter(apps, MainActivity.this);
         recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
     }
 
     private ArrayList<AppInfo> getDesktopApps() {
@@ -115,5 +113,23 @@ public class MainActivity extends AppCompatActivity {
             if (tempList.size() == MAX_AMOUNT_OF_APPS) break;
         }
         return desktopList;
+    }
+
+    private void initializeAppsList() {
+        PackageManager manager = getPackageManager();
+        ArrayList<AppInfo> allApps = new ArrayList<>();
+
+        Intent intent = new Intent(Intent.ACTION_MAIN, null);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        List<ResolveInfo> availableApps = manager.queryIntentActivities(intent, 0);
+        for (ResolveInfo resolveInfo : availableApps) {
+            AppInfo app = new AppInfo(
+                    resolveInfo.loadLabel(manager),
+                    resolveInfo.activityInfo.packageName,
+                    resolveInfo.activityInfo.loadIcon(manager));
+            allApps.add(app);
+        }
+        AppsActivity.setApps(allApps);
     }
 }
