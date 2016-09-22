@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         apps = getDesktopApps();
-        adapter = new MyRecyclerAdapter(apps,this);
+        adapter = new MyRecyclerAdapter(apps, this);
         recyclerView.setAdapter(adapter);
 
         btnCall = (ImageButton) findViewById(R.id.btnCall);
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         apps = getDesktopApps();
-        adapter = new MyRecyclerAdapter(apps,MainActivity.this);
+        adapter = new MyRecyclerAdapter(apps, MainActivity.this);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -110,9 +110,9 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<AppInfo> getDesktopApps() {
         ArrayList<AppInfo> tempList = AppsActivity.getApps();
         ArrayList<AppInfo> desktopList = new ArrayList<>();
-        for (AppInfo app: tempList) {
-            if(app.isOnDesktop())desktopList.add(app);
-            if(tempList.size() == MAX_AMOUNT_OF_APPS)break;
+        for (AppInfo app : tempList) {
+            if (app.isOnDesktop()) desktopList.add(app);
+            if (tempList.size() == MAX_AMOUNT_OF_APPS) break;
         }
         return desktopList;
     }

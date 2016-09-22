@@ -8,7 +8,7 @@ public class AppInfo {
     private CharSequence label;
     private CharSequence name;
     private Drawable icon;
-    private boolean onDesktop = false;
+    private boolean isOnDesktop = false;
 
     public AppInfo(CharSequence label, CharSequence name, Drawable icon) {
         this.label = label;
@@ -41,10 +41,10 @@ public class AppInfo {
     }
 
     public boolean isOnDesktop() {
-        return onDesktop;
+        return isOnDesktop;
     }
 
     public void setOnDesktop(boolean onDesktop) {
-        this.onDesktop = onDesktop;
+        isOnDesktop = onDesktop;
     }
 }

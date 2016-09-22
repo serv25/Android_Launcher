@@ -44,8 +44,11 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
     public void onBindViewHolder(MyRecyclerAdapter.ViewHolder holder, int position) {
         holder.appName.setText(apps.get(position).getLabel());
         holder.appIcon.setImageDrawable(apps.get(position).getIcon());
-        if (context instanceof MainActivity) holder.appCheckBox.setVisibility(View.GONE);
-        else holder.appCheckBox.setChecked(apps.get(position).isOnDesktop());
+
+        if (context instanceof MainActivity)
+            holder.appCheckBox.setVisibility(View.GONE);
+        else
+            holder.appCheckBox.setChecked(apps.get(position).isOnDesktop());
     }
 
     @Override
@@ -132,7 +135,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                         Intent intent = new Intent(Intent.ACTION_DELETE);
                         intent.setData(Uri.parse("package:" + name));
                         try {
-                            if(getApps().get(position).isOnDesktop()){
+                            if (getApps().get(position).isOnDesktop()) {
                                 int count = MainActivity.getCurrentAmountOfApps() - 1;
                                 MainActivity.setCurrentAmountOfApps(count);
                             }

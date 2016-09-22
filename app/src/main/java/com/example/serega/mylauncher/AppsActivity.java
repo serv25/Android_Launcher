@@ -46,7 +46,6 @@ public class AppsActivity extends Activity {
         layoutManager = new GridLayoutManager(AppsActivity.this, 3);
         recyclerView.setLayoutManager(layoutManager);
 
-        apps = getAllApps();
         adapter = new MyRecyclerAdapter(apps, this);
         recyclerView.setAdapter(adapter);
 
