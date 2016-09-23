@@ -71,28 +71,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
             v.setOnClickListener(onItemClick);
             v.setOnLongClickListener(onItemLongClick);
-
-            appCheckBox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int position = getAdapterPosition();
-                    int count = MainActivity.getCurrentAmountOfApps();
-                    if (appCheckBox.isChecked()) {
-                        if (count < MainActivity.getMaxAmountOfApps()) {
-                            getApps().get(position).setOnDesktop(true);
-                            count++;
-                            MainActivity.setCurrentAmountOfApps(count);
-                        } else {
-                            appCheckBox.setChecked(false);
-                            Toast.makeText(view.getContext(), "There is no space on desktop!", Toast.LENGTH_LONG).show();
-                        }
-                    } else {
-                        getApps().get(position).setOnDesktop(false);
-                        count--;
-                        MainActivity.setCurrentAmountOfApps(count);
-                    }
-                }
-            });
+            appCheckBox.setOnClickListener(onCheckBoxClick);
         }
 
         private View.OnClickListener onItemClick = new View.OnClickListener() {
@@ -129,7 +108,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 String name = getApps().get(position).getName().toString();
                 switch (view.getId()) {
                     case R.id.uninstall:
-                        uninstallApp(view, position,name);
+                        uninstallApp(view, position, name);
                         break;
                     case R.id.about_app:
                         aboutApp(view, name);
@@ -139,7 +118,29 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             }
         };
 
-        private void launchApp(View view){
+        private View.OnClickListener onCheckBoxClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int position = getAdapterPosition();
+                int count = MainActivity.getCurrentAmountOfApps();
+                if (appCheckBox.isChecked()) {
+                    if (count < MainActivity.getMaxAmountOfApps()) {
+                        getApps().get(position).setOnDesktop(true);
+                        count++;
+                        MainActivity.setCurrentAmountOfApps(count);
+                    } else {
+                        appCheckBox.setChecked(false);
+                        Toast.makeText(view.getContext(), "There is no space on desktop!", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    getApps().get(position).setOnDesktop(false);
+                    count--;
+                    MainActivity.setCurrentAmountOfApps(count);
+                }
+            }
+        };
+
+        private void launchApp(View view) {
             int position = getAdapterPosition();
             String name = getApps().get(position).getName().toString();
             PackageManager manager = view.getContext().getPackageManager();
@@ -152,7 +153,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             }
         }
 
-        private void uninstallApp(View view, int position, String name){
+        private void uninstallApp(View view, int position, String name) {
             Intent intent = new Intent(Intent.ACTION_DELETE);
             intent.setData(Uri.parse("package:" + name));
             try {
@@ -166,7 +167,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             }
         }
 
-        private void aboutApp(View view, String name){
+        private void aboutApp(View view, String name) {
             Intent i = new Intent();
             i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
             Uri uri = Uri.fromParts("package", name, null);
