@@ -45,10 +45,12 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         holder.appName.setText(apps.get(position).getLabel());
         holder.appIcon.setImageDrawable(apps.get(position).getIcon());
 
-        if (context instanceof MainActivity)
+        if (context instanceof MainActivity) {
             holder.appCheckBox.setVisibility(View.GONE);
-        else
+            holder.appIcon.setPadding(0, 20, 0, 0);
+        } else {
             holder.appCheckBox.setChecked(apps.get(position).isOnDesktop());
+        }
     }
 
     @Override

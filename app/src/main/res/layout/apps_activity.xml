@@ -1,38 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#d6d6d6"
-    android:orientation="vertical">
+    android:background="@android:color/white">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background_main" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#0042c7"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent"
         android:descendantFocusability="beforeDescendants"
         android:focusableInTouchMode="true"
         android:orientation="horizontal"
-        android:padding="2dp">
+        android:padding="3dp">
 
         <Button
             android:id="@+id/btn_list"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_list" />
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/colorBtnAppActivity"
+            android:text="@string/btn_list"
+            android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/btn_grid"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_grid" />
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/colorBtnAppActivity"
+            android:text="@string/btn_grid"
+            android:textColor="@android:color/white" />
 
         <EditText
             android:id="@+id/search"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp"
             android:background="@drawable/search_style"
             android:hint="@string/text_search"
-            android:padding="5dp" />
+            android:paddingLeft="15dp" />
 
     </LinearLayout>
 
@@ -40,6 +54,7 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
         android:scrollbars="vertical" />
 
-</LinearLayout>
+</RelativeLayout>

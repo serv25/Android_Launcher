@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
-    android:background="@android:color/white"
+    android:background="@android:color/transparent"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -28,6 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:gravity="center" />
+        android:gravity="center"
+        android:textColor="@android:color/white"/>
 
 </LinearLayout>
