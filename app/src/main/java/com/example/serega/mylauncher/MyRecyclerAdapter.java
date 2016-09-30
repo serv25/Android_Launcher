@@ -138,9 +138,9 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                         Toast.makeText(view.getContext(), "There is no space on desktop!", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    if(dsm.isRemoved(getAllApps().get(position))){
+                    if (dsm.isRemoved(getAllApps().get(position))) {
                         getAllApps().get(position).setOnDesktop(false);
-                    }else{
+                    } else {
                         getAllApps().get(position).setOnDesktop(true);
                         Toast.makeText(view.getContext(), "Error!", Toast.LENGTH_LONG).show();
                     }

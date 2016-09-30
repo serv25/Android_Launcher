@@ -62,10 +62,10 @@ public class DesktopSettingManager {
         return desktopApps;
     }
 
-    public boolean isRemoved(AppInfo appInfo){
+    public boolean isRemoved(AppInfo appInfo) {
         String objAsString = getObjAsString(appInfo);
         boolean bool = stringSet.remove(objAsString);
-        if(bool){
+        if (bool) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putStringSet(KEY, stringSet);
             editor.apply();
