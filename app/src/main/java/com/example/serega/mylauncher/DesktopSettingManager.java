@@ -25,13 +25,12 @@ public class DesktopSettingManager {
         stringSet = new HashSet<>(sharedPreferences.getStringSet(KEY, new HashSet<String>()));
     }
 
-    public boolean isAddedOnDesktop(AppInfo appInfo) {
+    public boolean isSaved(AppInfo appInfo) {
         if (stringSet == null) {
             stringSet = new HashSet<>();
             save(appInfo);
             return true;
-        } else
-        if (stringSet.size() < MAX_AMOUNT_OF_APPS) {
+        } else if (stringSet.size() < MAX_AMOUNT_OF_APPS) {
             String objAsString = getObjAsString(appInfo);
             if (!stringSet.contains(objAsString)) {
                 save(appInfo);
@@ -61,6 +60,17 @@ public class DesktopSettingManager {
         }
 
         return desktopApps;
+    }
+
+    public boolean isRemoved(AppInfo appInfo){
+        String objAsString = getObjAsString(appInfo);
+        boolean bool = stringSet.remove(objAsString);
+        if(bool){
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putStringSet(KEY, stringSet);
+            editor.apply();
+        }
+        return bool;
     }
 
     private void save(AppInfo appInfo) {

@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -128,23 +129,22 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             public void onClick(View view) {
                 int position = getAdapterPosition();
                 DesktopSettingManager dsm = new DesktopSettingManager(getContext());
-                dsm.isAddedOnDesktop(getAllApps().get(position));
 
-//                int count = MainActivity.getCurrentAmountOfApps();
-//                if (appCheckBox.isChecked()) {
-//                    if (count < MainActivity.getMaxAmountOfApps()) {
-//                        getApps().get(position).setOnDesktop(true);
-//                        count++;
-//                        MainActivity.setCurrentAmountOfApps(count);
-//                    } else {
-//                        appCheckBox.setChecked(false);
-//                        Toast.makeText(view.getContext(), "There is no space on desktop!", Toast.LENGTH_LONG).show();
-//                    }
-//                } else {
-//                    getApps().get(position).setOnDesktop(false);
-//                    count--;
-//                    MainActivity.setCurrentAmountOfApps(count);
-//                }
+                if (appCheckBox.isChecked()) {
+                    if (dsm.isSaved(getAllApps().get(position))) {
+                        getAllApps().get(position).setOnDesktop(true);
+                    } else {
+                        appCheckBox.setChecked(false);
+                        Toast.makeText(view.getContext(), "There is no space on desktop!", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    if(dsm.isRemoved(getAllApps().get(position))){
+                        getAllApps().get(position).setOnDesktop(false);
+                    }else{
+                        getAllApps().get(position).setOnDesktop(true);
+                        Toast.makeText(view.getContext(), "Error!", Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         };
 
@@ -166,8 +166,10 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             intent.setData(Uri.parse("package:" + name));
             try {
                 if (getAllApps().get(position).isOnDesktop()) {
+                    ////////////////////
 //                    int count = MainActivity.getCurrentAmountOfApps() - 1;
 //                    MainActivity.setCurrentAmountOfApps(count);
+                    ///////////////////////
                 }
                 view.getContext().startActivity(intent);
             } catch (Exception e) {
