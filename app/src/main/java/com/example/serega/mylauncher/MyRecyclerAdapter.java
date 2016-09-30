@@ -48,13 +48,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
     public void onBindViewHolder(MyRecyclerAdapter.ViewHolder holder, int position) {
         holder.appName.setText(allApps.get(position).getLabel());
         holder.appIcon.setImageDrawable(allApps.get(position).getIcon());
-
-        if (context instanceof MainActivity) {
-            holder.appCheckBox.setVisibility(View.GONE);
-            holder.appIcon.setPadding(0, 20, 0, 0);
-        } else {
-            holder.appCheckBox.setChecked(allApps.get(position).isOnDesktop());
-        }
+        holder.appCheckBox.setChecked(allApps.get(position).isOnDesktop());
     }
 
     @Override
@@ -75,8 +69,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             appIcon = (ImageView) v.findViewById(R.id.app_icon);
             appCheckBox = (CheckBox) v.findViewById(R.id.on_desktop);
 
-            v.setOnClickListener(onItemClick);
-            v.setOnLongClickListener(onItemLongClick);
+            appIcon.setOnClickListener(onItemClick);
+            appIcon.setOnLongClickListener(onItemLongClick);
             appCheckBox.setOnClickListener(onCheckBoxClick);
         }
 

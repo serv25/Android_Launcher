@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             linearLayout = new LinearLayout(this);
             linearLayout.setOrientation(LinearLayout.VERTICAL);
             linearLayout.setGravity(Gravity.CENTER);
-            linearLayout.setPadding(20, 20, 20, 20);
+            linearLayout.setPadding(25, 10, 25, 10);
 
             appIcon = new ImageView(this);
             appIcon.setImageDrawable(app.getIcon());
