@@ -19,9 +19,9 @@
     <android.support.v7.widget.GridLayout
         android:id="@+id/grid_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:rowCount="4"
-        app:columnCount="3"/>
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        app:columnCount="3" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

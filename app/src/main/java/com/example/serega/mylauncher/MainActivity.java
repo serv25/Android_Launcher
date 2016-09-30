@@ -4,15 +4,19 @@ package com.example.serega.mylauncher;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,10 +47,31 @@ public class MainActivity extends AppCompatActivity {
 
     private void showDesktopApps() {
         grid.removeAllViews();
+
+        LinearLayout linearLayout;
+        ImageView appIcon;
+        TextView appLabel;
+        MyClickListener onClickApp;
+
         for (AppInfo app : desktopApps) {
-            ImageView cell = new ImageView(this);
-            cell.setImageDrawable(app.getIcon());
-            grid.addView(cell);
+
+            linearLayout = new LinearLayout(this);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+            linearLayout.setGravity(Gravity.CENTER);
+            linearLayout.setPadding(20, 20, 20, 20);
+
+            appIcon = new ImageView(this);
+            appIcon.setImageDrawable(app.getIcon());
+            onClickApp = new MyClickListener(app.getName().toString());
+            appIcon.setOnClickListener(onClickApp);
+
+            appLabel = new TextView(this);
+            appLabel.setText(app.getLabel().toString());
+            appLabel.setTextColor(Color.WHITE);
+
+            linearLayout.addView(appIcon);
+            linearLayout.addView(appLabel);
+            grid.addView(linearLayout);
         }
     }
 
@@ -120,4 +145,26 @@ public class MainActivity extends AppCompatActivity {
         }
         AppsActivity.setApps(allApps);
     }
+}
+
+class MyClickListener implements View.OnClickListener {
+
+    private String appName;
+
+    public MyClickListener(String appName) {
+        this.appName = appName;
+    }
+
+    @Override
+    public void onClick(View view) {
+        try {
+            PackageManager manager = view.getContext().getPackageManager();
+            Intent intent = manager.getLaunchIntentForPackage(appName);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            view.getContext().startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
