@@ -16,22 +16,25 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.ViewHolder> {
 
-    private static ArrayList<AppInfo> apps;
-    private Context context;
+    private static ArrayList<AppInfo> allApps;
+    private static Context context;
 
-    public static ArrayList<AppInfo> getApps() {
-        return apps;
+    public MyRecyclerAdapter(ArrayList<AppInfo> allApps, Context context) {
+        MyRecyclerAdapter.allApps = allApps;
+        MyRecyclerAdapter.context = context;
     }
 
-    public MyRecyclerAdapter(ArrayList<AppInfo> apps, Context context) {
-        this.apps = apps;
-        this.context = context;
+    public static ArrayList<AppInfo> getAllApps() {
+        return allApps;
+    }
+
+    public static Context getContext() {
+        return context;
     }
 
     @Override
@@ -42,20 +45,20 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
     @Override
     public void onBindViewHolder(MyRecyclerAdapter.ViewHolder holder, int position) {
-        holder.appName.setText(apps.get(position).getLabel());
-        holder.appIcon.setImageDrawable(apps.get(position).getIcon());
+        holder.appName.setText(allApps.get(position).getLabel());
+        holder.appIcon.setImageDrawable(allApps.get(position).getIcon());
 
         if (context instanceof MainActivity) {
             holder.appCheckBox.setVisibility(View.GONE);
             holder.appIcon.setPadding(0, 20, 0, 0);
         } else {
-            holder.appCheckBox.setChecked(apps.get(position).isOnDesktop());
+            holder.appCheckBox.setChecked(allApps.get(position).isOnDesktop());
         }
     }
 
     @Override
     public int getItemCount() {
-        return apps.size();
+        return allApps.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -107,7 +110,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             @Override
             public void onClick(View view) {
                 int position = getAdapterPosition();
-                String name = getApps().get(position).getName().toString();
+                String name = getAllApps().get(position).getName().toString();
                 switch (view.getId()) {
                     case R.id.uninstall:
                         uninstallApp(view, position, name);
@@ -124,27 +127,30 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             @Override
             public void onClick(View view) {
                 int position = getAdapterPosition();
-                int count = MainActivity.getCurrentAmountOfApps();
-                if (appCheckBox.isChecked()) {
-                    if (count < MainActivity.getMaxAmountOfApps()) {
-                        getApps().get(position).setOnDesktop(true);
-                        count++;
-                        MainActivity.setCurrentAmountOfApps(count);
-                    } else {
-                        appCheckBox.setChecked(false);
-                        Toast.makeText(view.getContext(), "There is no space on desktop!", Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    getApps().get(position).setOnDesktop(false);
-                    count--;
-                    MainActivity.setCurrentAmountOfApps(count);
-                }
+                DesktopSettingManager dsm = new DesktopSettingManager(getContext());
+                dsm.isAddedOnDesktop(getAllApps().get(position));
+
+//                int count = MainActivity.getCurrentAmountOfApps();
+//                if (appCheckBox.isChecked()) {
+//                    if (count < MainActivity.getMaxAmountOfApps()) {
+//                        getApps().get(position).setOnDesktop(true);
+//                        count++;
+//                        MainActivity.setCurrentAmountOfApps(count);
+//                    } else {
+//                        appCheckBox.setChecked(false);
+//                        Toast.makeText(view.getContext(), "There is no space on desktop!", Toast.LENGTH_LONG).show();
+//                    }
+//                } else {
+//                    getApps().get(position).setOnDesktop(false);
+//                    count--;
+//                    MainActivity.setCurrentAmountOfApps(count);
+//                }
             }
         };
 
         private void launchApp(View view) {
             int position = getAdapterPosition();
-            String name = getApps().get(position).getName().toString();
+            String name = getAllApps().get(position).getName().toString();
             PackageManager manager = view.getContext().getPackageManager();
             try {
                 Intent intent = manager.getLaunchIntentForPackage(name);
@@ -159,9 +165,9 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             Intent intent = new Intent(Intent.ACTION_DELETE);
             intent.setData(Uri.parse("package:" + name));
             try {
-                if (getApps().get(position).isOnDesktop()) {
-                    int count = MainActivity.getCurrentAmountOfApps() - 1;
-                    MainActivity.setCurrentAmountOfApps(count);
+                if (getAllApps().get(position).isOnDesktop()) {
+//                    int count = MainActivity.getCurrentAmountOfApps() - 1;
+//                    MainActivity.setCurrentAmountOfApps(count);
                 }
                 view.getContext().startActivity(intent);
             } catch (Exception e) {

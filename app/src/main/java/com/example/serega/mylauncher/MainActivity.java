@@ -19,23 +19,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<AppInfo> apps;
+    private static ArrayList<AppInfo> desktopApps;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private static int currentAmountOfApps = 0;
-    private static final int MAX_AMOUNT_OF_APPS = 12;
-
-    public static int getCurrentAmountOfApps() {
-        return currentAmountOfApps;
-    }
-
-    public static void setCurrentAmountOfApps(int currentAmountOfApps) {
-        MainActivity.currentAmountOfApps = currentAmountOfApps;
-    }
-
-    public static int getMaxAmountOfApps() {
-        return MAX_AMOUNT_OF_APPS;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +33,13 @@ public class MainActivity extends AppCompatActivity {
         ImageButton btnApps = (ImageButton) findViewById(R.id.btnApps);
         ImageButton btnSMS = (ImageButton) findViewById(R.id.btnSMS);
 
-        initializeAppsList();
-        apps = getDesktopApps();
+        desktopApps = getDesktopApps();
+        initializeAllAppsList();
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 3);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new MyRecyclerAdapter(apps, this);
+        adapter = new MyRecyclerAdapter(desktopApps, this);
         recyclerView.setAdapter(adapter);
 
         btnCall.setOnClickListener(onClickListener);
@@ -100,22 +86,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        apps = getDesktopApps();
-        adapter = new MyRecyclerAdapter(apps, MainActivity.this);
+        desktopApps = getDesktopApps();
+        adapter = new MyRecyclerAdapter(desktopApps, MainActivity.this);
         recyclerView.setAdapter(adapter);
     }
 
     private ArrayList<AppInfo> getDesktopApps() {
-        ArrayList<AppInfo> tempList = AppsActivity.getApps();
-        ArrayList<AppInfo> desktopList = new ArrayList<>();
-        for (AppInfo app : tempList) {
-            if (app.isOnDesktop()) desktopList.add(app);
-            if (tempList.size() == MAX_AMOUNT_OF_APPS) break;
-        }
-        return desktopList;
+        DesktopSettingManager dsm = new DesktopSettingManager(MainActivity.this);
+        return dsm.getDesktopApps();
     }
 
-    private void initializeAppsList() {
+    private void initializeAllAppsList() {
         PackageManager manager = getPackageManager();
         ArrayList<AppInfo> allApps = new ArrayList<>();
 
@@ -129,6 +110,11 @@ public class MainActivity extends AppCompatActivity {
                     resolveInfo.activityInfo.packageName,
                     resolveInfo.activityInfo.loadIcon(manager));
             allApps.add(app);
+            for (AppInfo desktopApp : desktopApps) {
+                if (desktopApp.getName().equals(app.getName()) && desktopApp.getLabel().equals(app.getLabel())) {
+                    app.setOnDesktop(true);
+                }
+            }
         }
         AppsActivity.setApps(allApps);
     }

@@ -22,15 +22,16 @@ public class DesktopSettingManager {
     public DesktopSettingManager(Context context) {
         this.context = context;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        stringSet = new HashSet<>(sharedPreferences.getStringSet(KEY, new HashSet<String>()));
     }
 
     public boolean isAddedOnDesktop(AppInfo appInfo) {
-        stringSet = (HashSet<String>) sharedPreferences.getStringSet(KEY, new HashSet<String>());
         if (stringSet == null) {
             stringSet = new HashSet<>();
             save(appInfo);
             return true;
-        } else if (stringSet.size() < MAX_AMOUNT_OF_APPS) {
+        } else
+        if (stringSet.size() < MAX_AMOUNT_OF_APPS) {
             String objAsString = getObjAsString(appInfo);
             if (!stringSet.contains(objAsString)) {
                 save(appInfo);
@@ -40,16 +41,15 @@ public class DesktopSettingManager {
         return false;
     }
 
-    public ArrayList<AppInfo> getDesktopApps(){
+    public ArrayList<AppInfo> getDesktopApps() {
         ArrayList<AppInfo> desktopApps = new ArrayList<>();
 
-        stringSet = (HashSet<String>) sharedPreferences.getStringSet(KEY, new HashSet<String>());
         Gson gson = new Gson();
         AppForJson appForJson;
         Drawable icon = null;
         AppInfo appInfo;
 
-        for(String str : stringSet){
+        for (String str : stringSet) {
             appForJson = gson.fromJson(str, AppForJson.class);
             try {
                 icon = context.getPackageManager().getApplicationIcon(appForJson.name);
