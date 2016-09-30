@@ -16,12 +16,12 @@
         android:scaleType="centerCrop"
         android:src="@drawable/background_main" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/main_recycler_view"
+    <android.support.v7.widget.GridLayout
+        android:id="@+id/grid_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="60dp"
-        android:scrollbars="vertical" />
+        app:rowCount="4"
+        app:columnCount="3"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

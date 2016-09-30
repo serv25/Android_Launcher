@@ -165,12 +165,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             Intent intent = new Intent(Intent.ACTION_DELETE);
             intent.setData(Uri.parse("package:" + name));
             try {
-                if (getAllApps().get(position).isOnDesktop()) {
-                    ////////////////////
-//                    int count = MainActivity.getCurrentAmountOfApps() - 1;
-//                    MainActivity.setCurrentAmountOfApps(count);
-                    ///////////////////////
-                }
+                DesktopSettingManager dsm = new DesktopSettingManager(getContext());
+                dsm.isRemoved(getAllApps().get(position));
                 view.getContext().startActivity(intent);
             } catch (Exception e) {
                 e.printStackTrace();

@@ -7,12 +7,12 @@ import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.GridLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,31 +20,34 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static ArrayList<AppInfo> desktopApps;
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    private GridLayout grid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView = (RecyclerView) findViewById(R.id.main_recycler_view);
+        grid = (GridLayout) findViewById(R.id.grid_layout);
         ImageButton btnCall = (ImageButton) findViewById(R.id.btnCall);
         ImageButton btnApps = (ImageButton) findViewById(R.id.btnApps);
         ImageButton btnSMS = (ImageButton) findViewById(R.id.btnSMS);
 
         desktopApps = getDesktopApps();
         initializeAllAppsList();
-
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 3);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-        adapter = new MyRecyclerAdapter(desktopApps, this);
-        recyclerView.setAdapter(adapter);
+        showDesktopApps();
 
         btnCall.setOnClickListener(onClickListener);
         btnApps.setOnClickListener(onClickListener);
         btnSMS.setOnClickListener(onClickListener);
+    }
+
+    private void showDesktopApps() {
+        grid.removeAllViews();
+        for (AppInfo app : desktopApps) {
+            ImageView cell = new ImageView(this);
+            cell.setImageDrawable(app.getIcon());
+            grid.addView(cell);
+        }
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -87,8 +90,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         desktopApps = getDesktopApps();
-        adapter = new MyRecyclerAdapter(desktopApps, MainActivity.this);
-        recyclerView.setAdapter(adapter);
+        showDesktopApps();
     }
 
     private ArrayList<AppInfo> getDesktopApps() {
