@@ -2,20 +2,25 @@ package com.example.serega.mylauncher;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class DesktopSettingManager {
 
+    private Context context;
     private SharedPreferences sharedPreferences;
     private HashSet<String> stringSet;
     private static final String KEY = "******";
     private static final int MAX_AMOUNT_OF_APPS = 12;
 
     public DesktopSettingManager(Context context) {
+        this.context = context;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
@@ -33,6 +38,29 @@ public class DesktopSettingManager {
             }
         }
         return false;
+    }
+
+    public ArrayList<AppInfo> getDesktopApps(){
+        ArrayList<AppInfo> desktopApps = new ArrayList<>();
+
+        stringSet = (HashSet<String>) sharedPreferences.getStringSet(KEY, new HashSet<String>());
+        Gson gson = new Gson();
+        AppForJson appForJson;
+        Drawable icon = null;
+        AppInfo appInfo;
+
+        for(String str : stringSet){
+            appForJson = gson.fromJson(str, AppForJson.class);
+            try {
+                icon = context.getPackageManager().getApplicationIcon(appForJson.name);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            appInfo = new AppInfo(appForJson.label, appForJson.name, icon);
+            desktopApps.add(appInfo);
+        }
+
+        return desktopApps;
     }
 
     private void save(AppInfo appInfo) {
